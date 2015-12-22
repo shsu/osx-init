@@ -29,7 +29,7 @@ brew install git --with-blk-sha1 --with-brewed-curl --with-brewed-openssl --with
 brew install fpp git-flow-avh git-lfs tig
 
 # Core Libraries and Tools
-brew install coreutils findutils hub moreutils pigz tree watch watchman #TODO path change for corutils
+brew install asciinema ccat coreutils findutils hub moreutils pigz tree watch watchman yank httpie#TODO path change for corutils
 # ~/.config/fish/config.fish
 brew install wget --with-iri
 brew install imagemagick --with-webp
@@ -65,7 +65,7 @@ brew install mongodb postgresql redis
 brew install zeromq --with-libsodium --with-libpgm
 
 # Devops
-brew install ansible packer
+brew install ansible packer vegeta
 
 # Docker
 brew install docker docker-compose docker-machine
