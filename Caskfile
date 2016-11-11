@@ -3,34 +3,52 @@
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --prefpanedir=/Library/PreferencePanes --qlplugindir=/Library/QuickLook --fontdir=/Library/Fonts"
 #set -x HOMEBREW_CASK_OPTS "--appdir=/Applications --prefpanedir=/Library/PreferencePanes --qlplugindir=/Library/QuickLook --fontdir=/Library/Fonts"
 
-brew install caskroom/cask/brew-cask
+brew tap caskroom/cask
+
+# brew cask install 1password --caskroom=/Applications
 brew cask install adobe-reader
 #brew cask install alfred
 brew cask install android-file-transfer
 brew cask install atom
-brew cask install caffeine
+# brew cask install caffeine
 brew cask install coconutbattery
+brew cask install cyberduck
+brew cask install dash
 brew cask install disk-inventory-x
+# brew cask install docker
 brew cask install dropbox
+# brew cask install expandrive
 brew cask install flux
 brew cask install google-chrome --caskroom=/Applications
-brew cask install google-cloud-sdk
+# brew cask install google-cloud-sdk
 brew cask install google-drive
 brew cask install handbrake
 brew cask install imagealpha
 brew cask install imageoptim
 brew cask install iterm2
+# brew cask install little-snitch
+# brew cask install logitech-unifying
+brew cask install keepingyouawake
 brew cask install mactracker
+brew cask install mysqlworkbench
+# brew cask install paw
+brew cask install spectacle
 #brew cask install microsoft-office
 #brew cask install rescuetime
-brew cask install screenhero
+# brew cask install screenhero
 brew cask install skype
 brew cask install slack
 brew cask install spotify
 brew cask install sourcetree
 brew cask install tomighty
-brew cask install vagrant
-brew cask install virtualbox
 brew cask install viscosity
 brew cask install vlc
-brew cask install vmware-fusion
+brew cask install the-unarchiver
+
+brew cask install betterzipql
+brew cask install qlcolorcode
+brew cask install qlimagesize
+brew cask install qlstephen
+brew cask install qlprettypatch
+brew cask install quicklook-csv
+brew cask install quicklook-json
