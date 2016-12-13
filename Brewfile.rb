@@ -47,7 +47,6 @@ run_brew('install', [
 # Get Preferred Shell
 fish = prompt "Use fish Shell? (yes/no) "
 if fish == 'yes'
-  run_cmd('echo /usr/local/bin/fish | sudo tee -a /etc/shells && sudo chsh -s /usr/local/bin/fish `whoami`')
   run_brew('tap', ['
     brew tap fisherman/tap
   '])
@@ -55,8 +54,10 @@ if fish == 'yes'
     'fish',
     'fisherman'
   ])
+  `echo /usr/local/bin/fish | sudo tee -a /etc/shells && sudo chsh -s /usr/local/bin/fish #{`whoami`}`
 else
   run_cmd('zsh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"')
+  `echo /usr/local/bin/zsh | sudo tee -a /etc/shells && sudo chsh -s /usr/local/bin/zsh #{`whoami`}`
 end
 
 # Updating System Dependencies
@@ -91,10 +92,6 @@ if fish != 'yes'
   run_brew('install', ['nvm'])
 end
 
-run_cmd('pip install -U pip setuptools')
-run_cmd("gem install bundler pry \
-  && bundle config --global jobs $(#{`sysctl -n hw.ncpu`} - 1)")
-
 run_brew('install', [
   'diff-so-fancy',
   'git-lfs',
@@ -114,6 +111,11 @@ run_brew('install', [
   'the_silver_searcher',  # https://github.com/ggreer/the_silver_searcher
   'yank'                  # https://github.com/mptre/yank
 ])
+
+run_cmd('pip install -U pip setuptools')
+run_cmd("gem install bundler pry \
+  && bundle config --global jobs #{Integer(`sysctl -n hw.ncpu`) - 1}")
+
 
 # Database
 mariadb = prompt "Install MariaDB? (yes/no) "
