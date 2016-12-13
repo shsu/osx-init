@@ -39,7 +39,7 @@ brew install wget --with-iri
 brew install htop rename rlwrap pigz trash tree watch
 
 # Development Tools
-brew install git-lfs imagemagick nvm python sqlite ssh-copy-id
+brew install diff-so-fancy git-lfs imagemagick nvm python sqlite ssh-copy-id
 pip install -U pip setuptools
 pip install -U awscli boto s3cmd
 
