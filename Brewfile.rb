@@ -22,12 +22,20 @@ end
 
 def run_brew(command, items)
   items.each { |item|
+    if command == 'install' && @packages.include?(item.split(' ')[0])
+      next
+    end
     run_cmd("brew #{command} #{item}")
   }
 end
 
+@packages = `brew list -1`.split("\n")
+
 # Get brew!
-# run_cmd('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+`which -s brew`
+if $?.exitstatus != 0
+  run_cmd('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+end
 
 # Update existing shells
 run_brew('install', [
@@ -48,7 +56,7 @@ if fish == 'yes'
     'fisherman'
   ])
 else
-  run_cmd('sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"')
+  run_cmd('zsh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"')
 end
 
 # Updating System Dependencies
@@ -64,7 +72,7 @@ run_brew('install', [
   'screen',
   'whois',
   'vim --override-system-vi',
-  'brew install wget --with-iri'
+  'wget --with-iri'
 ])
 
 # System Tools
@@ -79,14 +87,13 @@ run_brew('install', [
 ])
 
 # Development Tools
-if fish == 'no'
+if fish != 'yes'
   run_brew('install', ['nvm'])
 end
 
 run_cmd('pip install -U pip setuptools')
-run_cmd('gem install bundler pry \
-  && number_of_cores=$(sysctl -n hw.ncpu) \
-  && bundle config --global jobs $(number_of_cores - 1)')
+run_cmd("gem install bundler pry \
+  && bundle config --global jobs $(#{`sysctl -n hw.ncpu`} - 1)")
 
 run_brew('install', [
   'diff-so-fancy',
@@ -110,7 +117,7 @@ run_brew('install', [
 
 # Database
 mariadb = prompt "Install MariaDB? (yes/no) "
-if mariadb == 'yes'
+if mariadb == 'yes' && @packages.include?('mariadb')
   run_cmd('brew tap homebrew/services \
     && brew install mariadb \
     && brew services start mariadb')
@@ -141,10 +148,12 @@ end
 
 run_cmd('brew cleanup')
 
-puts 'Add the following to your desired shell configuration file:
+if fish != 'yes'
+  append_to_rc = "
+    PATH=\"/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/findutils/libexec/gnubin:$PATH\"
+    MANPATH=\"/usr/local/opt/coreutils/libexec/gnuman:/usr/local/opt/findutils/libexec/gnuman:$MANPATH\"
+    export NVM_DIR=\"$HOME/.nvm\"
+    source /usr/local/opt/nvm/nvm.sh"
 
-PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/findutils/libexec/gnubin:$PATH"
-MANPATH="/usr/local/opt/coreutils/libexec/gnuman:/usr/local/opt/findutils/libexec/gnuman:$MANPATH"
-
-export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"'
+  `touch ~/.zshrc && echo \'#{append_to_rc}\' >> ~/.zshrc`
+end
