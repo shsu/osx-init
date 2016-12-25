@@ -88,8 +88,9 @@ run_brew('install', [
 ])
 
 # Development Tools
-if fish != 'yes'
-  run_brew('install', ['nvm'])
+run_brew('install', ['nvm'])
+if fish == 'yes'
+  run_cmd('fish -c "fisher nvm"')
 end
 
 run_brew('install', [
@@ -119,7 +120,7 @@ run_cmd("gem install bundler pry \
 
 # Database
 mariadb = prompt "Install MariaDB? (yes/no) "
-if mariadb == 'yes' && @packages.include?('mariadb')
+if mariadb == 'yes' && !@packages.include?('mariadb')
   run_cmd('brew tap homebrew/services \
     && brew install mariadb \
     && brew services start mariadb')
@@ -158,4 +159,12 @@ if fish != 'yes'
     source /usr/local/opt/nvm/nvm.sh"
 
   `touch ~/.zshrc && echo \'#{append_to_rc}\' >> ~/.zshrc`
+else
+  append_to_rc = "
+    set -gx NVM_DIR /usr/local/opt/nvm/
+    set -gx PATH /usr/local/opt/coreutils/libexec/gnubin /usr/local/opt/findutils/libexec/gnubin $PATH
+    set -gx MANPATH /usr/local/opt/coreutils/libexec/gnuman /usr/local/opt/findutils/libexec/gnuman $MANPATH
+  "
+
+  `touch ~/.config/fish/config.fish && echo \'#{append_to_rc}\' >> ~/.config/fish/config.fish`
 end
